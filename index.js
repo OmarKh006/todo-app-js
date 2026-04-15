@@ -1,5 +1,6 @@
 import {
   darkThemeButton,
+  getDeleteButtons,
   inputField,
   mainApp,
   submitTaskButton,
@@ -15,24 +16,15 @@ const fetchData = (key) => {
   return data ? JSON.parse(data) : false;
 };
 
-const addTask = (e) => {
-  e.preventDefault();
+const initTaskListiners = () => {
+  getDeleteButtons().forEach((button, index) => {
+    button.addEventListener("click", (e, index) => {
+      deleteTask(index);
+    });
+  });
+};
 
-  const taskValue = inputField.value;
-
-  if (!taskValue) return;
-
-  const task = {
-    value: taskValue,
-    isComplete: false,
-  };
-
-  const tasks = fetchData("tasks") || [];
-
-  tasks.push(task);
-
-  saveToDB("tasks", tasks);
-
+const renderTaskList = (tasks) => {
   let newTaskList = ``;
 
   tasks.forEach((task) => {
@@ -63,6 +55,41 @@ const addTask = (e) => {
 
   taskList.innerHTML = newTaskList;
   inputField.value = "";
+};
+
+const addTask = (e) => {
+  e.preventDefault();
+
+  const taskValue = inputField.value;
+
+  if (!taskValue) return;
+
+  const task = {
+    value: taskValue,
+    isComplete: false,
+  };
+
+  const tasks = fetchData("tasks") || [];
+
+  tasks.push(task);
+
+  saveToDB("tasks", tasks);
+
+  renderTaskList(tasks);
+
+  initTaskListiners();
+};
+
+const deleteTask = (e, index) => {
+  if (!confirm("Are you sure ??")) return;
+
+  const tasks = fetchData("tasks");
+
+  tasks.splice(index, 1);
+
+  saveToDB("tasks", tasks);
+
+  renderTaskList(tasks);
 };
 
 darkThemeButton?.addEventListener("click", () => {
