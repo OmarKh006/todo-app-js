@@ -6,6 +6,15 @@ import {
   taskList,
 } from "./scripts/elements";
 
+const saveToDB = (key, data) => {
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+const fetchData = (key) => {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : false;
+};
+
 const addTask = (e) => {
   e.preventDefault();
 
@@ -13,27 +22,47 @@ const addTask = (e) => {
 
   if (!taskValue) return;
 
-  taskList.innerHTML = `
-  <li class="TaskList__taskContent">
-    <div class="TaskList__checkbox" tabindex="0" role="button">
+  const task = {
+    value: taskValue,
+    isComplete: false,
+  };
+
+  const tasks = fetchData("tasks") || [];
+
+  tasks.push(task);
+
+  saveToDB("tasks", tasks);
+
+  let newTaskList = ``;
+
+  tasks.forEach((task) => {
+    newTaskList += `
+    <li class="TaskList__taskContent ${
+      task.isComplete ? "TaskList__taskContent--isActive" : ""
+    }">
+        <div class="TaskList__checkbox" tabindex="0" role="button">
+            <img
+                src="./assets/icon-checkmark.svg"
+                alt="check icon"
+                class="TaskList__checkboxImg"
+            />
+        </div>
+        <div class="TaskList__valueContent">
+        <p class="TaskList__value">
+            ${task.value}
+        </p>
         <img
-            src="./assets/icon-checkmark.svg"
-            alt="check icon"
-            class="TaskList__checkboxImg"
+            class="TaskList__deleteIcon"
+            src="./assets/icon-basket.svg"
+            alt="basket icon"
         />
-    </div>
-    <div class="TaskList__valueContent">
-    <p class="TaskList__value">
-        ${taskValue}
-    </p>
-    <img
-        class="TaskList__deleteIcon"
-        src="./assets/icon-basket.svg"
-        alt="basket icon"
-    />
-    </div>
+        </div>
     </li>
   `;
+  });
+
+  taskList.innerHTML = newTaskList;
+  inputField.value = "";
 };
 
 darkThemeButton?.addEventListener("click", () => {
