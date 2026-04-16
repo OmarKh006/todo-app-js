@@ -1,9 +1,4 @@
-import Sortable from "sortablejs";
-import { initDataOnStartup } from "./scripts/initDataOnStartup";
-import { taskList } from "./scripts/elements";
+import { initDataOnStartup, orderList } from "./scripts/initDataOnStartup";
 
 initDataOnStartup();
-
-new Sortable(taskList, {
-  animation: 150,
-});
+orderList();
