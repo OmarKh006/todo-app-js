@@ -16,10 +16,10 @@ const fetchData = (key) => {
   return data ? JSON.parse(data) : false;
 };
 
-const initTaskListiners = () => {
+const initTaskListeners = () => {
   getDeleteButtons().forEach((button, index) => {
-    button.addEventListener("click", (e, index) => {
-      deleteTask(index);
+    button.addEventListener("click", (e) => {
+      deleteTask(e, index);
     });
   });
 };
@@ -77,7 +77,7 @@ const addTask = (e) => {
 
   renderTaskList(tasks);
 
-  initTaskListiners();
+  initTaskListeners();
 };
 
 const deleteTask = (e, index) => {
@@ -90,6 +90,8 @@ const deleteTask = (e, index) => {
   saveToDB("tasks", tasks);
 
   renderTaskList(tasks);
+
+  initTaskListeners();
 };
 
 darkThemeButton?.addEventListener("click", () => {
