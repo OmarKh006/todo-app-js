@@ -75,9 +75,7 @@ const addTask = (e) => {
 
   saveToDB("tasks", tasks);
 
-  renderTaskList(tasks);
-
-  initTaskListeners();
+  initTaskList(tasks);
 };
 
 const deleteTask = (e, index) => {
@@ -89,15 +87,31 @@ const deleteTask = (e, index) => {
 
   saveToDB("tasks", tasks);
 
-  renderTaskList(tasks);
+  initTaskList(tasks);
+};
 
+const toggleDarkMode = () => {
+  mainApp?.classList.toggle("App--isDark");
+  saveToDB("isDark", mainApp?.classList.contains("App--isDark"));
+};
+
+const initDataOnStartup = () => {
+  fetchData("isDark") && toggleDarkMode();
+  renderTaskList(fetchData("tasks"));
+  initTaskListeners();
+};
+
+const initTaskList = (tasks) => {
+  renderTaskList(tasks);
   initTaskListeners();
 };
 
 darkThemeButton?.addEventListener("click", () => {
-  mainApp?.classList.toggle("App--isDark");
+  toggleDarkMode();
 });
 
 submitTaskButton.addEventListener("click", (e) => {
   addTask(e);
 });
+
+initDataOnStartup();
