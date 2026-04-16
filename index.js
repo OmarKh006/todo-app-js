@@ -1,5 +1,6 @@
 import {
   darkThemeButton,
+  getCheckBoxes,
   getDeleteButtons,
   inputField,
   mainApp,
@@ -20,6 +21,12 @@ const initTaskListeners = () => {
   getDeleteButtons().forEach((button, index) => {
     button.addEventListener("click", (e) => {
       deleteTask(e, index);
+    });
+  });
+
+  getCheckBoxes().forEach((box, index) => {
+    box.addEventListener("click", (e) => {
+      toggleTask(e, index);
     });
   });
 };
@@ -121,6 +128,15 @@ const renderEmptyState = () => {
               <p>Tasks List is empty</p>
             </li>
             `;
+};
+
+const toggleTask = (e, index) => {
+  const tasks = fetchData("tasks");
+  tasks[index].isComplete = !tasks[index].isComplete;
+  saveToDB("tasks", tasks);
+  e.currentTarget.parentElement.classList.toggle(
+    "TaskList__taskContent--isActive",
+  );
 };
 
 darkThemeButton?.addEventListener("click", () => {

@@ -7,3 +7,5 @@ export const getDeleteButtons = () =>
 export const submitTaskButton = document.querySelector(
   ".TaskSearchBar__button",
 );
+export const getCheckBoxes = () =>
+  document.querySelectorAll(".TaskList__checkbox");
