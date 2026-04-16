@@ -6,6 +6,7 @@ import {
   mainApp,
   submitTaskButton,
   taskList,
+  taskListLink,
 } from "./scripts/elements";
 
 const saveToDB = (key, data) => {
@@ -27,6 +28,9 @@ const initTaskListeners = () => {
   getCheckBoxes().forEach((box, index) => {
     box.addEventListener("click", (e) => {
       toggleTask(e, index);
+    });
+    box.addEventListener("keydown", (e) => {
+      e.key === "Enter" && toggleTask(e, index);
     });
   });
 };
@@ -143,8 +147,13 @@ darkThemeButton?.addEventListener("click", () => {
   toggleDarkMode();
 });
 
-submitTaskButton.addEventListener("click", (e) => {
+submitTaskButton?.addEventListener("click", (e) => {
   addTask(e);
+});
+
+taskListLink?.addEventListener("click", () => {
+  taskList?.classList.toggle("TaskList__list--hideCompleted");
+  taskListLink?.classList.toggle("TaskList__link--isActive");
 });
 
 initDataOnStartup();
