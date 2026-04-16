@@ -102,8 +102,25 @@ const initDataOnStartup = () => {
 };
 
 const initTaskList = (tasks) => {
+  if (!tasks?.length) {
+    renderEmptyState();
+    return;
+  }
   renderTaskList(tasks);
   initTaskListeners();
+};
+
+const renderEmptyState = () => {
+  taskList.innerHTML = `
+            <li class="EmptyList">
+              <img
+                src="./assets/icon-empty.svg"
+                alt="empty list"
+                class="EmptyList__img"
+              />
+              <p>Tasks List is empty</p>
+            </li>
+            `;
 };
 
 darkThemeButton?.addEventListener("click", () => {
